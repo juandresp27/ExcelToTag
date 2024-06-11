@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face{
+    font-family: "DM_serif";
+    src: url(./assets/DMSerifText-Regular.ttf) format("truetype");
+}
