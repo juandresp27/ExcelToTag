@@ -6,3 +6,13 @@
     font-family: "DM_serif";
     src: url(./assets/DMSerifText-Regular.ttf) format("truetype");
 }
+
+@font-face{
+    font-family: "amulya";
+    src: url(./assets/Amulya-Variable.ttf) format("truetype");
+}
+
+@font-face{
+    font-family: "Synonym";
+    src: url(./assets/Synonym-Variable.ttf) format("truetype");
+}

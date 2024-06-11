@@ -8,7 +8,9 @@ export default {
   theme: {
     extend: {},
     fontFamily: {
-      "DMSans": ["DM_serif", "sans-serif"]
+      "DMSans": ["DM_serif", "sans-serif"],
+      "amulya": ["amulya", "sans-serif"],
+      "Synonym": ["Synonym", "sans-serif"]
     }
   },
   plugins: [],
