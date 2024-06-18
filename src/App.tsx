@@ -12,13 +12,15 @@ enum APP_STATES  {
   APP_READY = "APPREADY"
 }
 export function App() {
+  const Excel = new ExcelRepository() // Lectura asincrona no hay respuesta...
   const excelFile = useFileStore(state => state.excelFile);
   const [appState, setAppState] = useState<APP_STATES>(APP_STATES.IDLE)
 
   useEffect(() => {
     if(excelFile !== null) {
-      const excel = new ExcelRepository(excelFile) // Lectura asincrona no hay respuesta...
-      console.log(excel.workbook)
+      Excel.fileToWorkbook(excelFile).then(() => {
+        console.log(Excel.workbook)
+      })
     }
   },[excelFile])
 
@@ -31,6 +33,7 @@ export function App() {
           <IdleComponent/>
         )
       }
+      <div>{JSON.stringify(Excel.workbook)}</div>
     </section>
   )
 }
