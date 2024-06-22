@@ -17,21 +17,5 @@
     src: url(./assets/Synonym-Variable.ttf) format("truetype");
 }
 
-button {
-    width: fit-content;
-    padding: 0.5em 1em;
-    background: rgb(139, 67, 181);
-    border-radius: 2em;
-    text-decoration: none;
-    font-weight: 300;
-    color: #ffffff;
-    text-shadow: 0 0.04em 0.04em rgba(255, 255, 255, 0.253);
-    text-align: center;
-    transition: all 0.2s;
 
-    &:hover {
-        color: #fff;
-        background-color: #c561ff;
-      }
-  }
   

@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
-    "xlsx": "^0.18.5",
-    "zustand": "^4.5.2"
+    "@nextui-org/react": "2.4.2",
+    "@silevis/reactgrid": "4.1.6",
+    "framer-motion": "11.2.10",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-dropzone": "14.2.3",
+    "xlsx": "0.18.5",
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

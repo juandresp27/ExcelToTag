@@ -1,11 +1,11 @@
 import { create } from 'zustand'
-
-export interface FlowDataStore {
-    excelFile: File | null;
-    setExcelFile: (excelFile: File) => void;
+import { WorkBook } from "xlsx"
+export interface WorkbookStore {
+    workbook: WorkBook | null;
+    setWorkbook: (workbook: WorkBook) => void;
   }
 
-export const useFileStore = create<FlowDataStore>((set) => ({
-  excelFile: null,
-  setExcelFile: (excelFile) => set({ excelFile }),
+export const useFileStore = create<WorkbookStore>((set) => ({
+  workbook: null,
+  setWorkbook: (workbook) => set({ workbook }),
 }))
