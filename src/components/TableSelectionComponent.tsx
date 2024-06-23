@@ -1,14 +1,10 @@
 import { Tab, Tabs } from "@nextui-org/react";
-import { ReactGrid, Column, Row, Range } from "@silevis/reactgrid";
+import { ReactGrid, Range } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
 import { Key, useEffect, useState } from "react";
 import { type WorkBook } from "xlsx";
 import { DataParsed, ExcelRepository } from "../utils/ExcelRepository";
 
-
-const sheet = (workbook: WorkBook, name: string) => {
-  return workbook.Sheets[name]
-}
 
 export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
   const [sheetSelected, setSheetSelected] = useState(workbook.SheetNames[0]) 
@@ -24,6 +20,7 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
 
   useEffect(()=>{
     const dataParsed = ExcelRepository.getDataFromSheet(workbook.Sheets[sheetSelected])
+    console.log(dataParsed)
     setData(dataParsed)
   },[sheetSelected, workbook])
 
@@ -33,19 +30,21 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
         aria-label="SheetNames"
         selectedKey={sheetSelected}
         onSelectionChange={handleTabChange}
+        style={{color: "red "}}
       >
         {
           sheetNamesList.map(name =>
-            <Tab key={name} title={name} className="h-full rounded-lg">
+            <Tab key={name} title={name} className="h-full rounded-lg flex  items-center">
               {
                 data && (
-                  <ReactGrid 
-                    rows={data.rows}
-                    columns={data.columns}
-                    enableRangeSelection 
-                    onSelectionChanged={handleChange}
-                    
-                  />
+                    <ReactGrid 
+                      rows={data.rows}
+                      columns={data.columns}
+                      enableRangeSelection 
+                      onSelectionChanged={handleChange}
+                      
+                    />
+                  
                 )
               }
             </Tab>

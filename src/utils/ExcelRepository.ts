@@ -1,5 +1,5 @@
 
-import { Column, DefaultCellTypes, NumberCell, Row, TextCell } from "@silevis/reactgrid";
+import { Column, DefaultCellTypes, HeaderCell, Row, TextCell } from "@silevis/reactgrid";
 import * as XLSX from "xlsx"
 
 export interface DataParsed {
@@ -52,13 +52,17 @@ export class ExcelRepository {
     
     const letterArray = this.generateLettersArray(maximumLetter)
     const numberArray = this.generateNumbersArray(maximumNumber)
+    
     const headerRow: Row = {
       rowId: "header",
-      cells: letterArray.map(column => ({ type: "header", text: column }))
+      cells: [
+        { type: "header", text:" " },
+        ...letterArray.map<HeaderCell>(column => ({ type: "header", text: column }))
+      ]
     }
 
     const columns: Column[] = [
-      {columnId: "row", width: 150},
+      {columnId: " ", width: 50},
       ...letterArray.map(letter => ({ columnId: letter, width: 150 }))
     ]
 
@@ -68,7 +72,6 @@ export class ExcelRepository {
       for (let j = 0; j < letterArray.length; j++) {
         const column = letterArray[j];
         const key = column + row
-        console.log(key)
         if(data.has(row)){
           const previusRow = data.get(row);
           data.set(row, {...previusRow, [column]: sheet[key]?.v ?? ""})
@@ -79,14 +82,15 @@ export class ExcelRepository {
     }
   
     const dataArray = Array.from(data, ([,value]) => (value))
+    console.log("Data array", dataArray)
     const rows: Row[] = [
       headerRow,
       ...dataArray.map<Row>(rowData => ({
         rowId: rowData.row,
-        cells: letterArray.map<NumberCell | TextCell>(column => ({
-          type: "text",
-          text: String(rowData[column])
-        }))
+        cells: [
+          { type: "text", text: String(rowData.row) },
+          ...letterArray.map<TextCell>(column => ({ type: "text", text: String(rowData[column]) }))
+        ]
       }))
     ] 
 
