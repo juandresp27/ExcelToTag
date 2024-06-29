@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@nextui-org/react": "2.4.2",
     "@silevis/reactgrid": "4.1.6",
     "framer-motion": "11.2.10",
@@ -30,6 +35,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "postcss": "^8.4.38",
+    "sass": "^1.77.6",
+    "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"

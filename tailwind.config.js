@@ -15,6 +15,6 @@ export default {
       "Synonym": ["Synonym", "sans-serif"]
     }
   },
-  plugins: [nextui()]
+  plugins: [nextui(), require('tailwind-scrollbar')({ nocompatible: true })]
 }
 

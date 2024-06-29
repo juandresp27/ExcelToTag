@@ -4,27 +4,31 @@ import Header from './components/Header/Header'
 import { IdleComponent } from './components/IdleComponent'
 import { useFileStore } from './stores/file-store'
 import { TableSelectionComponent } from './components/TableSelectionComponent'
+import { PrincipalApp } from './components/PrincipalApp'
 
 
 enum APP_STATES  {
   IDLE = "IDLE",
-  FILE_CHARGING = "FILECHARG",
-  TABLE_SELECTION = "TABLESELECTION"
+  TABLE_SELECTION = "TABLESELECTION",
+  READY = "READY",
 }
-// Manejo de la subida:
-// Cargar en el componente el array buffer // cambiar el callback o usar then
-// Crear la clase del ExcelRepository con el array buffer o el XLSX workbook
-// Guardar la instancia en el contexto: El contexto pasaría de Null -> ExcelRep
+
 export function App() {
   const [appState, setAppState] = useState<APP_STATES>(APP_STATES.IDLE)
   const workbook = useFileStore(state => state.workbook)
+  const jsonSelected = useFileStore(state => state.jsonSelected)
 
   useEffect(()=>{
     if(workbook){
       setAppState(APP_STATES.TABLE_SELECTION)
       console.log(workbook)
     }
-  },[workbook])
+    if(jsonSelected){
+      setAppState(APP_STATES.READY)
+      console.log(jsonSelected)
+      
+    }
+  },[workbook, jsonSelected])
 
 
   return (
@@ -38,6 +42,11 @@ export function App() {
       {
         appState === APP_STATES.TABLE_SELECTION && workbook && (
           <TableSelectionComponent workbook={workbook} />
+        )
+      }
+      {
+        appState === APP_STATES.READY && jsonSelected && (
+          <PrincipalApp json={jsonSelected}/>
         )
       }
     </section>
