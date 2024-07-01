@@ -1,4 +1,6 @@
 import React, { useRef, useEffect } from 'react';
+import { TextPosition } from '../models/general';
+import { MAX_HEIGHT, MAX_WIDTH, calculateSize, reductFraction } from '../utils/canvas';
 
 interface CanvasRendererProps {
   object: Record<string, string>;
@@ -6,26 +8,24 @@ interface CanvasRendererProps {
   canvasWidth: number;
   canvasHeight: number;
   textSize: number;
-  margin: number; // Nuevo prop para el margen
-  padding: number; // Nuevo prop para el padding entre conjuntos
+  margin: number;
+  padding: number;
+  onPositionsChange: (positions: TextPosition[]) => void; 
 }
 
-interface TextPosition {
-  key: string;
-  value: string;
-  x: number;
-  y: number;
-}
-
-export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns, canvasWidth, canvasHeight, textSize, margin, padding }) => {
+export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns, canvasWidth, canvasHeight, textSize, margin, padding, onPositionsChange }) => {
+  
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const positionsRef = useRef<TextPosition[]>([]);
   const draggingRef = useRef<{ index: number | null, offsetX: number, offsetY: number }>({ index: null, offsetX: 0, offsetY: 0 });
 
+  const [numerator, denominator] = reductFraction(canvasWidth, canvasHeight);
+  const [newWidth, newHeight] = calculateSize(numerator, denominator, MAX_WIDTH, MAX_HEIGHT)
+
   const resetPositions = () => {
     const entries = Object.entries(object);
-    const columnWidth = (canvasWidth - 2 * margin) / columns;
-    const rowHeight = textSize + padding; // Ajuste aquí
+    const columnWidth = (newWidth - 2 * margin) / columns;
+    const rowHeight = textSize + padding; 
 
     positionsRef.current = entries.map(([key, value], index) => {
       const column = index % columns;
@@ -34,10 +34,11 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
         key,
         value,
         x: margin + column * columnWidth,
-        y: margin + row * rowHeight + textSize // Ajuste aquí
+        y: margin + row * rowHeight + textSize 
       };
     });
 
+    onPositionsChange(positionsRef.current);
     redrawCanvas();
   };
 
@@ -46,7 +47,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
     if (canvas) {
       const context = canvas.getContext('2d');
       if (context) {
-        context.clearRect(0, 0, canvasWidth, canvasHeight);
+        context.clearRect(0, 0, newWidth, newHeight);
         context.font = `${textSize}px Arial`;
         positionsRef.current.forEach(({ key, value, x, y }) => {
           context.fillText(`${key}: ${value}`, x, y);
@@ -93,6 +94,8 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
         positionsRef.current[index].x = x - draggingRef.current.offsetX;
         positionsRef.current[index].y = y - draggingRef.current.offsetY;
 
+        onPositionsChange(positionsRef.current); 
+
         redrawCanvas();
       }
     }
@@ -107,8 +110,8 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
       <button onClick={resetPositions}>Reset</button>
       <canvas
         ref={canvasRef}
-        width={canvasWidth}
-        height={canvasHeight}
+        width={newWidth}
+        height={newHeight}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
