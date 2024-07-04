@@ -1,2 +1,6 @@
 $primary-color: #da9dfd;    
 @import '@silevis/reactgrid/styles.scss';
+
+.dark .reactgrid-content .rg-pane .rg-cell {
+    color: white !important; // Usa !important si es necesario para sobrescribir los estilos
+}

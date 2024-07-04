@@ -12,7 +12,7 @@ import { useFileStore } from "../stores/file-store";
 export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
   const [sheetSelected, setSheetSelected] = useState(workbook.SheetNames[0]) 
   const [data, setData] = useState<DataParsed | null>(null)
-  const [json, setJson] = useState<any[]>([])
+  const [json, setJson] = useState<Record<string, string>[]>([])
   const setJsonSelected = useFileStore(state => state.setJsonSelected)
 
   const handleChange = (selectedRange: Range[]) => {
@@ -48,7 +48,8 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
             <Tab key={name} title={name}>
               {
                 data && (
-                  <div className="max-w-2xl max-h-96 p-2 dark: text-white overflow-auto scrollbar-thin scrollbar-corner-[#773a9b] scrollbar-thumb-[#c561ff] scrollbar-track-white dark:scrollbar-track-[#4d4c4c]  scrollbar-thumb-rounded-full">
+                  <div className="max-w-2xl max-h-96 p-2  overflow-auto scrollbar-thin scrollbar-corner-[#773a9b] scrollbar-thumb-[#c561ff] scrollbar-track-white dark:scrollbar-track-[#4d4c4c]  scrollbar-thumb-rounded-full">
+                    <span className="italic">Select columns and rows to continue...</span>
                     <ReactGrid 
                       rows={data.rows}
                       columns={data.columns}
@@ -65,14 +66,14 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
         }
       </Tabs>
       <div className="w-full flex justify-between">
-        <Button startContent={<FontAwesomeIcon icon={faArrowLeft} />}>Volver</Button>
+        <Button startContent={<FontAwesomeIcon icon={faArrowLeft} />}>Back</Button>
         <Button 
           startContent={<FontAwesomeIcon icon={faToolbox}/>} 
           isDisabled={json.length === 0} 
           color="secondary"
           onClick={()=>{setJsonSelected(json)}}
         >
-          Elegir
+          Choose
         </Button>
       </div>
     </section>

@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { TextPosition } from '../models/general';
 import { MAX_HEIGHT, MAX_WIDTH, calculateSize, reductFraction } from '../utils/canvas';
+import { Button } from '@nextui-org/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 interface CanvasRendererProps {
   object: Record<string, string>;
@@ -48,7 +51,10 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
       const context = canvas.getContext('2d');
       if (context) {
         context.clearRect(0, 0, newWidth, newHeight);
+        context.fillStyle="white"
+        context.fillRect(0, 0, newWidth, newHeight);
         context.font = `${textSize}px Arial`;
+        context.fillStyle="black"
         positionsRef.current.forEach(({ key, value, x, y }) => {
           context.fillText(`${key}: ${value}`, x, y);
         });
@@ -106,8 +112,13 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
   };
 
   return (
-    <div>
-      <button onClick={resetPositions}>Reset</button>
+    <div className='w-fit'>
+      <div className='flex justify-between py-1 items-center'>
+        <span className='font-semibold'>Preview:</span>
+        <Button isIconOnly onClick={resetPositions} variant="flat">
+          <FontAwesomeIcon icon={faArrowsRotate}/>
+        </Button>
+      </div>
       <canvas
         ref={canvasRef}
         width={newWidth}

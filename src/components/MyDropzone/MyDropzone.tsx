@@ -31,11 +31,11 @@ export function MyDropzone() {
             <input {...getInputProps()} />
             {
                 isDragActive ?
-                <p className='font-semibold'>Suelta el archivo aquí ...</p> :
+                <p className='font-semibold'>Drop the file here ...</p> :
                 <div className='flex flex-col justify-center items-center gap-2'>
-                  <span className='font-semibold'>Arrastra un elemento al contenedor o</span>
-                  <Button type="button" onClick={open} >
-                    Ábrelo desde aquí
+                  <span className='font-semibold'>Drag an item to the container or</span>
+                  <Button type="button" onClick={open} color='secondary'>
+                    Open it from here
                   </Button>
                 </div>
             }
