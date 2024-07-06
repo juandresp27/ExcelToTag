@@ -1,4 +1,4 @@
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import { useFileStore } from '../../stores/file-store'
 import { ExcelRepository } from '../../utils/ExcelRepository';
@@ -6,9 +6,19 @@ import { Button } from '@nextui-org/react';
 
 export function MyDropzone() {
   const workbookSetter = useFileStore(state => state.setWorkbook)
+  const [acceptedFile, setAcceptedFile] = useState<boolean>(true);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const [file] = acceptedFiles;
+    if(file === undefined) {
+      setAcceptedFile(false)
+
+      setTimeout(() => {
+        setAcceptedFile(true);
+      }, 3000);
+
+      return
+    }
     // Validar tipo de file, lanzar errores
     ExcelRepository.fileToWorkBook(file).then(workbook => {
       workbookSetter(workbook);
@@ -37,6 +47,11 @@ export function MyDropzone() {
                   <Button type="button" onClick={open} color='secondary'>
                     Open it from here
                   </Button>
+                  {
+                    !acceptedFile && (
+                      <span className='italic text-sm text-red-950 dark:text-red-200'>Formato de archivo no soportado</span>
+                    )
+                  }
                 </div>
             }
         </div>

@@ -9,7 +9,7 @@ import "./table-selection.scss"
 import { useFileStore } from "../stores/file-store";
 
 
-export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
+export function TableSelectionComponent({ workbook, goBack }: { workbook: WorkBook, goBack: () => void }) {
   const [sheetSelected, setSheetSelected] = useState(workbook.SheetNames[0]) 
   const [data, setData] = useState<DataParsed | null>(null)
   const [json, setJson] = useState<Record<string, string>[]>([])
@@ -20,7 +20,6 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
     if(data){
       const json = ExcelRepository.dataToJson(range, data)
       setJson(json)
-      console.log("Json", json)
     }
   }
 
@@ -32,7 +31,6 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
 
   useEffect(()=>{
     const dataParsed = ExcelRepository.getDataFromSheet(workbook.Sheets[sheetSelected])
-    console.log(dataParsed)
     setData(dataParsed)
   },[sheetSelected, workbook])
 
@@ -66,7 +64,7 @@ export function TableSelectionComponent({ workbook }: { workbook: WorkBook }) {
         }
       </Tabs>
       <div className="w-full flex justify-between">
-        <Button startContent={<FontAwesomeIcon icon={faArrowLeft} />}>Back</Button>
+        <Button startContent={<FontAwesomeIcon icon={faArrowLeft} />} onClick={goBack}>Back</Button>
         <Button 
           startContent={<FontAwesomeIcon icon={faToolbox}/>} 
           isDisabled={json.length === 0} 

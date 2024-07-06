@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { TextPosition } from '../models/general';
-import { MAX_HEIGHT, MAX_WIDTH, calculateSize, reductFraction } from '../utils/canvas';
+import { MAX_HEIGHT, MAX_WIDTH, calculateSize, calculateTextSize } from '../utils/canvas';
 import { Button } from '@nextui-org/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
@@ -22,13 +22,21 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
   const positionsRef = useRef<TextPosition[]>([]);
   const draggingRef = useRef<{ index: number | null, offsetX: number, offsetY: number }>({ index: null, offsetX: 0, offsetY: 0 });
 
-  const [numerator, denominator] = reductFraction(canvasWidth, canvasHeight);
-  const [newWidth, newHeight] = calculateSize(numerator, denominator, MAX_WIDTH, MAX_HEIGHT)
+
+  const [newWidth, newHeight] = useMemo(
+    () => calculateSize(canvasWidth, canvasHeight, MAX_WIDTH, MAX_HEIGHT),
+    [canvasWidth, canvasHeight]
+  )
+
+  const text = useMemo(
+    () => calculateTextSize(canvasWidth, newWidth, textSize),
+    [canvasWidth, newWidth, textSize]
+  )
 
   const resetPositions = () => {
     const entries = Object.entries(object);
     const columnWidth = (newWidth - 2 * margin) / columns;
-    const rowHeight = textSize + padding; 
+    const rowHeight = text + padding; 
 
     positionsRef.current = entries.map(([key, value], index) => {
       const column = index % columns;
@@ -37,7 +45,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
         key,
         value,
         x: margin + column * columnWidth,
-        y: margin + row * rowHeight + textSize 
+        y: margin + row * rowHeight + text 
       };
     });
 
@@ -53,7 +61,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
         context.clearRect(0, 0, newWidth, newHeight);
         context.fillStyle="white"
         context.fillRect(0, 0, newWidth, newHeight);
-        context.font = `${textSize}px Arial`;
+        context.font = `${text}pt Arial`;
         context.fillStyle="black"
         positionsRef.current.forEach(({ key, value, x, y }) => {
           context.fillText(`${key}: ${value}`, x, y);
@@ -64,7 +72,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
 
   useEffect(() => {
     resetPositions();
-  }, [object, columns, canvasWidth, canvasHeight, textSize, margin, padding]);
+  }, [object, columns, canvasWidth, canvasHeight, text, margin, padding]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -75,7 +83,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({ object, columns,
 
       const foundIndex = positionsRef.current.findIndex(pos => {
         const textWidth = canvas.getContext('2d')!.measureText(`${pos.key}: ${pos.value}`).width;
-        return x >= pos.x && x <= pos.x + textWidth && y >= pos.y - textSize && y <= pos.y;
+        return x >= pos.x && x <= pos.x + textWidth && y >= pos.y - text && y <= pos.y;
       });
 
       if (foundIndex !== -1) {

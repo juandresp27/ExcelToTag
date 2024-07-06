@@ -8,7 +8,7 @@ import { Properties, TextPosition } from "../models/general";
 import jsPDF from "jspdf";
 import { convertCoordinatesToCm } from "../utils/canvas";
 
-export function PrincipalApp({ json }: { json: Record<string, string>[] }) {
+export function PrincipalApp({ json, goBack }: { json: Record<string, string>[], goBack: () => void }) {
   const [properties, setProperties] = useState<Properties>({
     canvasColumn: 2,
     canvasHeight: 4,
@@ -53,7 +53,6 @@ export function PrincipalApp({ json }: { json: Record<string, string>[] }) {
   };
 
   const handlePositionsChange = (newPositions: TextPosition[]) => {
-    console.log("pos", newPositions);
     setPosition(newPositions);
   };
 
@@ -122,9 +121,11 @@ export function PrincipalApp({ json }: { json: Record<string, string>[] }) {
   return (
     <section className="grid md:grid-cols-2 grid-cols-1 w-screen h-screen overflow-auto pb-4 pt-2 scrollbar-thin scrollbar-thumb-rounded-full">
       <div className="md:col-span-2 col-span-1 px-6">
-        <Button isIconOnly variant="flat" color="secondary">
-          <FontAwesomeIcon icon={faArrowLeft}/>
-        </Button>
+        <Tooltip content="Back">
+          <Button isIconOnly variant="flat" color="secondary" onClick={goBack}>
+            <FontAwesomeIcon icon={faArrowLeft}/>
+          </Button>
+        </Tooltip>
       </div>
       <div className="col-span-1 px-6 py-2 flex flex-col gap-4">
         <Table

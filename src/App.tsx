@@ -18,17 +18,31 @@ export function App() {
   const workbook = useFileStore(state => state.workbook)
   const jsonSelected = useFileStore(state => state.jsonSelected)
 
+  const setWorkbook = useFileStore(state => state.setWorkbook)
+  const setJson = useFileStore(state => state.setJsonSelected)
+
   useEffect(()=>{
     if(workbook){
       setAppState(APP_STATES.TABLE_SELECTION)
-      console.log(workbook)
     }
     if(jsonSelected){
       setAppState(APP_STATES.READY)
-      console.log(jsonSelected)
-      
     }
   },[workbook, jsonSelected])
+
+  const handleBack = () => {
+    if(appState === APP_STATES.IDLE) return
+
+    if(appState === APP_STATES.TABLE_SELECTION){
+      setAppState(APP_STATES.IDLE)
+      setWorkbook(null)
+    }
+
+    if(appState === APP_STATES.READY){
+      setAppState(APP_STATES.TABLE_SELECTION)
+      setJson(null)
+    }
+  }
 
 
   return (
@@ -41,12 +55,12 @@ export function App() {
       }
       {
         appState === APP_STATES.TABLE_SELECTION && workbook && (
-          <TableSelectionComponent workbook={workbook} />
+          <TableSelectionComponent workbook={workbook} goBack={handleBack}/>
         )
       }
       {
         appState === APP_STATES.READY && jsonSelected && (
-          <PrincipalApp json={jsonSelected}/>
+          <PrincipalApp json={jsonSelected} goBack={handleBack}/>
         )
       }
     </section>

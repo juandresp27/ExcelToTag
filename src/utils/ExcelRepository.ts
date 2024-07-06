@@ -82,7 +82,6 @@ export class ExcelRepository {
     }
 
     const dataArray = Array.from(data, ([, value]) => (value))
-    console.log("Data array", dataArray)
     const rows: Array<Row<HeaderCell | TextCell>> = [
       headerRow,
       ...dataArray.map<Row<TextCell>>(rowData => ({

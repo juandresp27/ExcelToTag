@@ -22,7 +22,8 @@ export const reductFraction = (numerador: number, denominador: number) =>  {
   }
 }
 
-export const calculateSize = (widthCm: number, heightCm: number, maxWidthPx: number, maxHeightPx: number) => {
+export const calculateSize = (width: number, height: number, maxWidthPx: number, maxHeightPx: number) => {
+  const [widthCm, heightCm] = reductFraction(width, height)
   let newWidth = maxWidthPx;
   let newHeight = (heightCm * maxWidthPx) / widthCm;
   if(newHeight > maxHeightPx){
@@ -37,4 +38,15 @@ export const convertCoordinatesToCm = (widthCm: number, heightCm: number, x: num
   const xInCm = (widthCm * x) / widthInPx;
   const yInCm = (heightCm * y) / heightInPx;
   return ({x: xInCm, y: yInCm})
+}
+
+export const calculateTextSize = (
+  widthCm: number,
+  widthPx: number,
+  textSize: number
+) => {
+  const firstDensity = widthPx /widthCm
+  const text = (firstDensity/62) * textSize
+  return text
+
 }
