@@ -63,6 +63,9 @@ export function App() {
           <PrincipalApp json={jsonSelected} goBack={handleBack}/>
         )
       }
+      <footer className="justify-end flex w-full bg-zinc-800 text-white py-2 px-4 font-semibold text-sm">
+        By @juandresp27
+      </footer>
     </section>
   )
 }
